@@ -37,6 +37,38 @@ const registerUser = async (req,res) => {
 }
 
 
+const login = async (req,res) => {
+    try{
+        const {email,password} = req.body;
+
+        const user = await User.findOne({email});
+        if(!user) return res.status(400).json({Message : "User not Found"});
+
+        const isPasswordMatched = await bcrypt.compare(password , user.password);
+        if(!isPasswordMatched) return res.status(400).json({Message : "Wrong Password try again"});
 
 
-module.exports ={registerUser}
+        res.json({
+            _id : user._id,
+            name : user.name,
+            email:user.email,
+            token :genrateToken(user._id),
+        })
+    }catch(error){
+        console.log(error);
+        res.status(500).json({Message : "Internal Server Error"})
+    }
+}
+
+const getProfile = async (req,res) => {
+    try{
+        const user = await User.findById(req.user.id).select("-password");
+        res.json(user)
+    }catch(err){
+        console.log(err);
+        res.status(500).json({Message : "Internal Server Error"})
+    }
+}
+
+
+module.exports ={registerUser,login,getProfile}
