@@ -17,5 +17,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
     "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "typescript": "^5.9.3"
   }
 }
